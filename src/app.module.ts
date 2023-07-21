@@ -8,8 +8,8 @@ import { ConversationModule } from './conversation/conversation.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ envFilePath: '.env.dev', isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    ConfigModule.forRoot(),
     DataSeedsModule,
     ConversationModule,
   ],
