@@ -7,7 +7,7 @@ export type MessageDocument = HydratedDocument<Message>;
 @Schema()
 export class Message {
   @Prop(MessageTypeEnum)
-  from: MessageTypeEnum; // todo: this will be an enum
+  from: MessageTypeEnum;
 
   @Prop(String)
   value: string;
