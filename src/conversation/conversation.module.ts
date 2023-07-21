@@ -1,9 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ConversationService } from './conversation.service';
-import { ConversationController } from './conversation.controller';
+import { ConversationController } from './http/conversation.controller';
+import { ConversationService } from './service/conversation.service';
+import {
+  Conversation,
+  ConversationSchema,
+} from './infraestructure/conversation.schema';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
+  imports: [
+    MongooseModule.forFeature([
+      { name: Conversation.name, schema: ConversationSchema },
+    ]),
+  ],
   controllers: [ConversationController],
-  providers: [ConversationService]
+  providers: [ConversationService],
 })
 export class ConversationModule {}
