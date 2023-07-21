@@ -6,6 +6,7 @@ import {
   ConversationSchema,
 } from './infraestructure/conversation.schema';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConversationRepository } from './infraestructure/conversation.repository';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     ]),
   ],
   controllers: [ConversationController],
-  providers: [ConversationService],
+  providers: [ConversationService, ConversationRepository],
 })
 export class ConversationModule {}
