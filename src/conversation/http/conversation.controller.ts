@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ConversationService } from '../service/conversation.service';
 import { SeedConversationsDto } from '../domain/dtos/seed-conversations.dto';
+import { CreateCompletionDto } from '../domain/dtos/create-completion.dto';
 
 @Controller('conversation')
 export class ConversationController {
@@ -8,13 +9,12 @@ export class ConversationController {
 
   @Post('seed')
   async seedConversations(@Body() seedConversationsDto: SeedConversationsDto) {
-    await this.conversationService.seed(seedConversationsDto);
+    this.conversationService.seed(seedConversationsDto);
+    return { message: 'Running seed.' };
   }
 
   @Post('completion')
-  async getNextMessage(
-    @Body('messages') messages: { from: string; value: string }[],
-  ) {
-    return await this.conversationService.getNextMessage(messages);
+  async createCompletion(@Body() createCompletionDto: CreateCompletionDto) {
+    return await this.conversationService.createCompletion(createCompletionDto);
   }
 }

@@ -12,6 +12,7 @@ import { chain } from 'stream-chain';
 import { parser } from 'stream-json';
 import { streamArray } from 'stream-json/streamers/StreamArray';
 import { SeedConversationsDto } from '../domain/dtos/seed-conversations.dto';
+import { CreateCompletionDto } from '../domain/dtos/create-completion.dto';
 
 @Injectable()
 export class ConversationService {
@@ -89,9 +90,9 @@ export class ConversationService {
     }
   }
 
-  async getNextMessage(
-    messages: { from: string; value: string }[],
-  ): Promise<{ from: string; value: string }> {
+  async createCompletion({
+    messages,
+  }: CreateCompletionDto): Promise<{ from: string; value: string }> {
     const lastMessage = messages[messages.length - 1];
 
     const conversation = await this.conversationRepository.findByMessage(
