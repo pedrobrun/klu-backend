@@ -30,8 +30,8 @@ export class ConversationRepository {
     return await this.conversationModel.find({ id });
   }
 
-  async findByIds(ids: string[]) {
-    return await this.conversationModel.find({ id: { $in: ids } });
+  async findByExternalIds(ids: string[]) {
+    return await this.conversationModel.find({ externalId: { $in: ids } });
   }
 
   async findByMessage(message: { from: string; value: string }) {

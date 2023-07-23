@@ -1,5 +1,6 @@
 import {
   Injectable,
+  Logger,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -32,7 +33,7 @@ export class ConversationService {
     }
 
     console.time('timer');
-    console.log('Starting conversations seed');
+    Logger.log('Starting conversations seed');
 
     const batch = [];
     const batchSize = Number(process.env.SEED_BATCH_SIZE);
@@ -56,7 +57,7 @@ export class ConversationService {
           try {
             await this.conversationRepository.createMany(batch);
           } catch (e) {
-            console.error('error', e.message);
+            Logger.error('error', e.message);
             process.exit(1);
           }
           batch.length = 0;
@@ -71,23 +72,82 @@ export class ConversationService {
         try {
           await this.conversationRepository.createMany(batch);
         } catch (e) {
-          console.error('error');
+          Logger.error('error');
           process.exit(1);
         }
         console.timeEnd('timer');
-        console.log('Data seeding completed');
+        Logger.log('Data seeding completed');
       }
     });
   }
 
-  async findAndLogMissingRecords(idBatch: string[]) {
-    const conversations = await this.conversationRepository.findByIds(idBatch);
-    const foundIds = new Set(conversations.map((c) => c.id));
-    for (const id of idBatch) {
-      if (!foundIds.has(id)) {
-        console.log('Missing record with id:', id);
-      }
+  async testSeed({ secret }: SeedConversationsDto) {
+    if (secret !== process.env.SEED_SECRET) {
+      throw new UnauthorizedException('Invalid secret.');
     }
+
+    console.time('timer');
+    Logger.log('Starting seed testing...');
+
+    let batch = [];
+    const batchSize = 1000;
+    const pendingPromises = [];
+
+    return new Promise((resolve, reject) => {
+      const pipeline = chain([
+        createReadStream(
+          join(process.cwd(), 'src/seed-data/conversations.json'),
+        ),
+        parser(),
+        streamArray(),
+        async ({ _, value }) => {
+          batch.push(value.id);
+
+          if (batch.length >= batchSize) {
+            pipeline.pause();
+            pendingPromises.push(this.findAndLogMissingRecords(batch));
+            batch = [];
+            pipeline.resume();
+          }
+          return null; // To not propagate downstream
+        },
+      ]);
+
+      pipeline.on('end', async () => {
+        try {
+          if (batch.length > 0) {
+            pendingPromises.push(this.findAndLogMissingRecords(batch));
+          }
+
+          const results = (await Promise.all(pendingPromises)).flat();
+
+          console.timeEnd('timer');
+          Logger.log('Data testing completed');
+          if (results.length > 0) {
+            resolve({
+              ok: false,
+              message: 'Some records were not found',
+              notFound: results,
+            });
+          } else {
+            resolve({ ok: true, message: 'All records were found' });
+          }
+        } catch (e) {
+          Logger.error(e);
+          reject(e);
+        }
+      });
+
+      pipeline.on('error', reject);
+    });
+  }
+
+  async findAndLogMissingRecords(idBatch: string[]) {
+    const conversations = await this.conversationRepository.findByExternalIds(
+      idBatch,
+    );
+    const foundIds = new Set(conversations.map((c) => c.externalId));
+    return idBatch.filter((id) => !foundIds.has(id));
   }
 
   async createCompletion({
