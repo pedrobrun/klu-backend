@@ -8,7 +8,7 @@ import { CommandModule } from 'nestjs-command';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: '.env.dev', isGlobal: true }),
+    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     MongooseModule.forRoot(process.env.MONGODB_URI),
     ConversationModule,
     CommandModule,

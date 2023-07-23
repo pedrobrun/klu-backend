@@ -14,7 +14,7 @@ describe('ConversationService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({ envFilePath: '.env.dev', isGlobal: true }),
+        ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
         MongooseModule.forRoot(process.env.MONGODB_URI),
         MongooseModule.forFeature([
           { name: Conversation.name, schema: ConversationSchema },

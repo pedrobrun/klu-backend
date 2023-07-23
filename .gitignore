@@ -1,5 +1,5 @@
 # Env
-.env.*
+.env
 
 # Seed Data
 src/seed-data/
