@@ -16,11 +16,17 @@ export class Conversation {
   @Prop({ index: true, type: String })
   value: string;
 
-  @Prop(String)
-  nextMessageValue: string;
+  @Prop({ type: String, required: false, index: true })
+  prevMessageValue?: string;
 
-  @Prop(MessageTypeEnum)
-  nextMessageRole: MessageTypeEnum;
+  @Prop({ enum: MessageTypeEnum, required: false, index: true })
+  prevMessageRole?: MessageTypeEnum;
+
+  @Prop({ type: String, required: false })
+  nextMessageValue?: string;
+
+  @Prop({ enum: MessageTypeEnum, required: false })
+  nextMessageRole?: MessageTypeEnum;
 }
 
 export const ConversationSchema = SchemaFactory.createForClass(Conversation);

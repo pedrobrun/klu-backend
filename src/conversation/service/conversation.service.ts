@@ -65,8 +65,13 @@ export class ConversationService {
                     from: convo.from as MessageTypeEnum,
                     value: convo.value,
                     nextMessageValue:
-                      data.conversations[index + 1]?.value || '',
-                    nextMessageRole: data.conversations[index + 1]?.from || '',
+                      data.conversations[index + 1]?.value || undefined,
+                    nextMessageRole:
+                      data.conversations[index + 1]?.from || undefined,
+                    prevMessageValue:
+                      data.conversations[index - 1]?.value || undefined,
+                    prevMessageRole:
+                      data.conversations[index - 1]?.from || undefined,
                   };
                   conversationDtos.push(dto);
                 });
@@ -173,10 +178,12 @@ export class ConversationService {
     choices: { from: MessageTypeEnum; value: string }[];
   }> {
     const lastMessage = messages[messages.length - 1];
+    const previousMessage = messages[messages.length - 2];
 
-    const conversation = await this.conversationRepository.findByMessage(
-      lastMessage,
-    );
+    const conversation = await this.conversationRepository.findByMessage({
+      message: lastMessage,
+      previousMessage,
+    });
 
     if (!conversation || conversation.length === 0) {
       throw new NotFoundException('No completion found for this message');
