@@ -14,6 +14,7 @@ import { parser } from 'stream-json';
 import { streamArray } from 'stream-json/streamers/StreamArray';
 import { SeedConversationsDto } from '../domain/dtos/seed-conversations.dto';
 import { CreateCompletionDto } from '../domain/dtos/create-completion.dto';
+import { MessageTypeEnum } from '../domain/message-type.enum';
 
 @Injectable()
 export class ConversationService {
@@ -55,7 +56,25 @@ export class ConversationService {
         if (batch.length >= batchSize) {
           pipeline.pause();
           try {
-            await this.conversationRepository.createMany(batch);
+            const formattedBatch: CreateConversationDto[] = batch
+              .map((data) => {
+                let conversationDtos: CreateConversationDto[] = [];
+                data.conversations.forEach((convo, index) => {
+                  let dto: CreateConversationDto = {
+                    externalId: data.id,
+                    from: convo.from as MessageTypeEnum,
+                    value: convo.value,
+                    nextMessageValue:
+                      data.conversations[index + 1]?.value || '',
+                    nextMessageRole: data.conversations[index + 1]?.from || '',
+                  };
+                  conversationDtos.push(dto);
+                });
+                return conversationDtos;
+              })
+              .flat();
+
+            await this.conversationRepository.createMany(formattedBatch);
           } catch (e) {
             Logger.error('error', e.message);
             process.exit(1);
@@ -159,18 +178,13 @@ export class ConversationService {
       lastMessage,
     );
 
-    if (!conversation) {
+    if (!conversation || !conversation.nextMessageValue) {
       throw new NotFoundException('No completion found for this message');
     }
 
-    const idx = conversation.conversations.findIndex(
-      (msg) => msg.from === lastMessage.from && msg.value === lastMessage.value,
-    );
-
-    if (idx === -1 || idx + 1 >= conversation.conversations.length) {
-      throw new NotFoundException('No completion found for this message');
-    }
-
-    return conversation.conversations[idx + 1];
+    return {
+      from: conversation.nextMessageRole,
+      value: conversation.nextMessageValue,
+    };
   }
 }
