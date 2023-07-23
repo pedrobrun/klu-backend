@@ -30,7 +30,7 @@ export class ConversationService {
     console.log('Starting conversations seed');
 
     const batch = [];
-    const batchSize = 1000;
+    const batchSize = Number(process.env.SEED_BATCH_SIZE);
 
     const pipeline = chain([
       createReadStream(join(process.cwd(), 'src/seed-data/conversations.json')),
