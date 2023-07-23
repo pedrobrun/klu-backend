@@ -8,6 +8,7 @@ import {
 } from '../infraestructure/conversation.schema';
 import { ConfigModule } from '@nestjs/config';
 import { NotFoundException } from '@nestjs/common';
+import mongoose from 'mongoose';
 
 describe('ConversationService', () => {
   let service: ConversationService;
@@ -25,6 +26,10 @@ describe('ConversationService', () => {
     }).compile();
 
     service = module.get<ConversationService>(ConversationService);
+  });
+
+  afterEach(async () => {
+    await mongoose.disconnect();
   });
 
   it('should be defined', async () => {
