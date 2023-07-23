@@ -14,6 +14,7 @@ import { parser } from 'stream-json';
 import { streamArray } from 'stream-json/streamers/StreamArray';
 import { SeedConversationsDto } from '../domain/dtos/seed-conversations.dto';
 import { CreateCompletionDto } from '../domain/dtos/create-completion.dto';
+import { MessageEntity } from '../domain/message.entity';
 
 @Injectable()
 export class ConversationService {
@@ -152,25 +153,30 @@ export class ConversationService {
 
   async createCompletion({
     messages,
-  }: CreateCompletionDto): Promise<{ from: string; value: string }> {
+  }: CreateCompletionDto): Promise<{ choices: MessageEntity[] }> {
     const lastMessage = messages[messages.length - 1];
 
-    const conversation = await this.conversationRepository.findByMessage(
+    const conversations = await this.conversationRepository.findByMessage(
       lastMessage,
     );
 
-    if (!conversation) {
+    const completions: MessageEntity[] = [];
+
+    for (const conversation of conversations) {
+      const idx = conversation.conversations.findIndex(
+        (msg) =>
+          msg.from === lastMessage.from && msg.value === lastMessage.value,
+      );
+
+      if (idx !== -1 && idx + 1 < conversation.conversations.length) {
+        completions.push(conversation.conversations[idx + 1]);
+      }
+    }
+
+    if (completions.length === 0) {
       throw new NotFoundException('No completion found for this message');
     }
 
-    const idx = conversation.conversations.findIndex(
-      (msg) => msg.from === lastMessage.from && msg.value === lastMessage.value,
-    );
-
-    if (idx === -1 || idx + 1 >= conversation.conversations.length) {
-      throw new NotFoundException('No completion found for this message');
-    }
-
-    return conversation.conversations[idx + 1];
+    return { choices: completions };
   }
 }
