@@ -105,7 +105,7 @@ export class ConversationService {
 
           if (batch.length >= batchSize) {
             pipeline.pause();
-            pendingPromises.push(this.findAndLogMissingRecords(batch));
+            pendingPromises.push(this.checkBatchInsertions(batch));
             batch = [];
             pipeline.resume();
           }
@@ -116,7 +116,7 @@ export class ConversationService {
       pipeline.on('end', async () => {
         try {
           if (batch.length > 0) {
-            pendingPromises.push(this.findAndLogMissingRecords(batch));
+            pendingPromises.push(this.checkBatchInsertions(batch));
           }
 
           const results = (await Promise.all(pendingPromises)).flat();
@@ -142,7 +142,7 @@ export class ConversationService {
     });
   }
 
-  async findAndLogMissingRecords(idBatch: string[]) {
+  async checkBatchInsertions(idBatch: string[]) {
     const conversations = await this.conversationRepository.findByExternalIds(
       idBatch,
     );
