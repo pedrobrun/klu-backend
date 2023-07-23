@@ -1,6 +1,11 @@
-import { MessageEntity } from './message.entity';
+import { MessageTypeEnum } from './message-type.enum';
 
 export class ConversationEntity {
   readonly externalId: string;
-  readonly conversations: Array<MessageEntity>;
+  readonly from: MessageTypeEnum;
+  readonly value: string;
+  readonly nextMessageValue?: String;
+  readonly nextMessageRole?: MessageTypeEnum;
+  readonly prevMessageValue?: string;
+  readonly prevMessageRole?: MessageTypeEnum;
 }

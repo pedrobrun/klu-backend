@@ -34,10 +34,24 @@ export class ConversationRepository {
     return await this.conversationModel.find({ externalId: { $in: ids } });
   }
 
-  async findByMessage(message: { from: string; value: string }) {
+  async findByMessage({
+    message,
+    previousMessage,
+  }: {
+    message: { from: string; value: string };
+    previousMessage?: { from: string; value: string };
+  }) {
+    if (previousMessage) {
+      return await this.conversationModel.find({
+        value: message.value,
+        from: message.from,
+        prevMessageRole: previousMessage.from,
+        prevMessageValue: previousMessage.value,
+      });
+    }
     return await this.conversationModel.find({
-      'conversations.from': message.from,
-      'conversations.value': message.value,
+      value: message.value,
+      from: message.from,
     });
   }
 }

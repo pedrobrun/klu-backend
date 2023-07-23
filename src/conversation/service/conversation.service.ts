@@ -14,7 +14,7 @@ import { parser } from 'stream-json';
 import { streamArray } from 'stream-json/streamers/StreamArray';
 import { SeedConversationsDto } from '../domain/dtos/seed-conversations.dto';
 import { CreateCompletionDto } from '../domain/dtos/create-completion.dto';
-import { MessageEntity } from '../domain/message.entity';
+import { MessageTypeEnum } from '../domain/message-type.enum';
 
 @Injectable()
 export class ConversationService {
@@ -56,7 +56,30 @@ export class ConversationService {
         if (batch.length >= batchSize) {
           pipeline.pause();
           try {
-            await this.conversationRepository.createMany(batch);
+            const formattedBatch: CreateConversationDto[] = batch
+              .map((data) => {
+                let conversationDtos: CreateConversationDto[] = [];
+                data.conversations.forEach((convo, index) => {
+                  let dto: CreateConversationDto = {
+                    externalId: data.externalId,
+                    from: convo.from as MessageTypeEnum,
+                    value: convo.value,
+                    nextMessageValue:
+                      data.conversations[index + 1]?.value || undefined,
+                    nextMessageRole:
+                      data.conversations[index + 1]?.from || undefined,
+                    prevMessageValue:
+                      data.conversations[index - 1]?.value || undefined,
+                    prevMessageRole:
+                      data.conversations[index - 1]?.from || undefined,
+                  };
+                  conversationDtos.push(dto);
+                });
+                return conversationDtos;
+              })
+              .flat();
+
+            await this.conversationRepository.createMany(formattedBatch);
           } catch (e) {
             Logger.error('error', e.message);
             process.exit(1);
@@ -151,32 +174,26 @@ export class ConversationService {
     return idBatch.filter((id) => !foundIds.has(id));
   }
 
-  async createCompletion({
-    messages,
-  }: CreateCompletionDto): Promise<{ choices: MessageEntity[] }> {
+  async createCompletion({ messages }: CreateCompletionDto): Promise<{
+    choices: { from: MessageTypeEnum; value: string }[];
+  }> {
     const lastMessage = messages[messages.length - 1];
+    const previousMessage = messages[messages.length - 2];
 
-    const conversations = await this.conversationRepository.findByMessage(
-      lastMessage,
-    );
+    const conversation = await this.conversationRepository.findByMessage({
+      message: lastMessage,
+      previousMessage,
+    });
 
-    const completions: MessageEntity[] = [];
-
-    for (const conversation of conversations) {
-      const idx = conversation.conversations.findIndex(
-        (msg) =>
-          msg.from === lastMessage.from && msg.value === lastMessage.value,
-      );
-
-      if (idx !== -1 && idx + 1 < conversation.conversations.length) {
-        completions.push(conversation.conversations[idx + 1]);
-      }
-    }
-
-    if (completions.length === 0) {
+    if (!conversation || conversation.length === 0) {
       throw new NotFoundException('No completion found for this message');
     }
 
-    return { choices: completions };
+    return {
+      choices: conversation.map((convo) => ({
+        from: convo.nextMessageRole,
+        value: convo.nextMessageValue,
+      })),
+    };
   }
 }
