@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateConversationDto } from '../domain/dtos/create-conversation.dto';
 import { ConversationRepository } from '../infraestructure/conversation.repository';
 import { ConversationEntity } from '../domain/conversation.entity';
@@ -83,5 +87,29 @@ export class ConversationService {
         console.log('Missing record with id:', id);
       }
     }
+  }
+
+  async getNextMessage(
+    messages: { from: string; value: string }[],
+  ): Promise<{ from: string; value: string }> {
+    const lastMessage = messages[messages.length - 1];
+
+    const conversation = await this.conversationRepository.findByMessage(
+      lastMessage,
+    );
+
+    if (!conversation) {
+      throw new NotFoundException('No completion found for this message');
+    }
+
+    const idx = conversation.conversations.findIndex(
+      (msg) => msg.from === lastMessage.from && msg.value === lastMessage.value,
+    );
+
+    if (idx === -1 || idx + 1 >= conversation.conversations.length) {
+      throw new NotFoundException('No completion found for this message');
+    }
+
+    return conversation.conversations[idx + 1];
   }
 }

@@ -10,4 +10,11 @@ export class ConversationController {
   async seedConversations(@Body() seedConversationsDto: SeedConversationsDto) {
     await this.conversationService.seed(seedConversationsDto);
   }
+
+  @Post('completion')
+  async getNextMessage(
+    @Body('messages') messages: { from: string; value: string }[],
+  ) {
+    return await this.conversationService.getNextMessage(messages);
+  }
 }
