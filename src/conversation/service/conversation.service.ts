@@ -66,11 +66,11 @@ export class ConversationService {
                     value: convo.value,
                     nextMessageValue:
                       data.conversations[index + 1]?.value || undefined,
-                    nextMessageRole:
+                    nextMessageType:
                       data.conversations[index + 1]?.from || undefined,
                     prevMessageValue:
                       data.conversations[index - 1]?.value || undefined,
-                    prevMessageRole:
+                    prevMessageType:
                       data.conversations[index - 1]?.from || undefined,
                   };
                   conversationDtos.push(dto);
@@ -191,7 +191,7 @@ export class ConversationService {
 
     return {
       choices: conversation.map((convo) => ({
-        from: convo.nextMessageRole,
+        from: convo.nextMessageType,
         value: convo.nextMessageValue,
       })),
     };

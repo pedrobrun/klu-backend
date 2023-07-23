@@ -19,7 +19,7 @@ export class CreateConversationDto {
 
   @IsOptional()
   @IsEnum(MessageTypeEnum)
-  nextMessageRole?: MessageTypeEnum;
+  nextMessageType?: MessageTypeEnum;
 
   @IsOptional()
   @IsString()
@@ -27,5 +27,5 @@ export class CreateConversationDto {
 
   @IsOptional()
   @IsEnum(MessageTypeEnum)
-  prevMessageRole?: MessageTypeEnum;
+  prevMessageType?: MessageTypeEnum;
 }

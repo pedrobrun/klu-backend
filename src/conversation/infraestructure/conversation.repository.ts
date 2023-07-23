@@ -45,7 +45,7 @@ export class ConversationRepository {
       return await this.conversationModel.find({
         value: message.value,
         from: message.from,
-        prevMessageRole: previousMessage.from,
+        prevMessageType: previousMessage.from,
         prevMessageValue: previousMessage.value,
       });
     }
