@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 
 export class CreateConversationDto {
   @IsString()
-  id: string;
+  externalId: string;
 
   @Type(() => MessageEntity)
   @IsArray({ each: true })

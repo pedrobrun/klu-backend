@@ -7,7 +7,7 @@ export type ConversationDocument = HydratedDocument<Conversation>;
 @Schema()
 export class Conversation {
   @Prop(String)
-  id: string;
+  externalId: string;
 
   @Prop(Array<Message>)
   conversations: Array<Message>;

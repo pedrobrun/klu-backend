@@ -12,9 +12,25 @@ export class ConversationRepository {
     private conversationModel: Model<Conversation>,
   ) {}
 
-  async createOne(
+  async create(
     createConversationDto: CreateConversationDto,
   ): Promise<ConversationEntity> {
     return await this.conversationModel.create(createConversationDto);
+  }
+
+  async getAll() {
+    return await this.conversationModel.find();
+  }
+
+  async createMany(createConversationDto: CreateConversationDto[]) {
+    return await this.conversationModel.insertMany(createConversationDto);
+  }
+
+  async findById(id: string) {
+    return await this.conversationModel.find({ id });
+  }
+
+  async findByIds(ids: string[]) {
+    return await this.conversationModel.find({ id: { $in: ids } });
   }
 }

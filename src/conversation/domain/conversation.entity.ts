@@ -1,6 +1,6 @@
 import { MessageEntity } from './message.entity';
 
 export class ConversationEntity {
-  readonly id: string;
+  readonly externalId: string;
   readonly conversations: Array<MessageEntity>;
 }

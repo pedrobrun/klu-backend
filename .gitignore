@@ -2,7 +2,7 @@
 .env.*
 
 # Seed Data
-src/data-seeds/data
+src/seed-data/
 
 # compiled output
 /dist
