@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Logger, Post } from '@nestjs/common';
 import { ConversationService } from '../service/conversation.service';
 import { SeedConversationsDto } from '../domain/dtos/seed-conversations.dto';
 import { CreateCompletionDto } from '../domain/dtos/create-completion.dto';
@@ -14,6 +14,7 @@ export class ConversationController {
   }
 
   @Post('completion')
+  @HttpCode(200)
   async createCompletion(@Body() createCompletionDto: CreateCompletionDto) {
     return await this.conversationService.createCompletion(createCompletionDto);
   }
