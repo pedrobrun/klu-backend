@@ -20,7 +20,7 @@ export class Conversation {
   nextMessageValue: string;
 
   @Prop(MessageTypeEnum)
-  nextMessageRole: MessageTypeEnum;
+  nextMessageType: MessageTypeEnum;
 }
 
 export const ConversationSchema = SchemaFactory.createForClass(Conversation);

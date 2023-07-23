@@ -17,5 +17,5 @@ export class CreateConversationDto {
   nextMessageValue: string;
 
   @IsEnum(MessageTypeEnum)
-  nextMessageRole: MessageTypeEnum;
+  nextMessageType: MessageTypeEnum;
 }

@@ -5,5 +5,5 @@ export class ConversationEntity {
   readonly from: MessageTypeEnum;
   readonly value: string;
   readonly nextMessageValue: String;
-  readonly nextMessageRole: MessageTypeEnum;
+  readonly nextMessageType: MessageTypeEnum;
 }
