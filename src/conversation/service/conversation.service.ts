@@ -61,7 +61,7 @@ export class ConversationService {
                 let conversationDtos: CreateConversationDto[] = [];
                 data.conversations.forEach((convo, index) => {
                   let dto: CreateConversationDto = {
-                    externalId: data.id,
+                    externalId: data.externalId,
                     from: convo.from as MessageTypeEnum,
                     value: convo.value,
                     nextMessageValue:
@@ -169,22 +169,24 @@ export class ConversationService {
     return idBatch.filter((id) => !foundIds.has(id));
   }
 
-  async createCompletion({
-    messages,
-  }: CreateCompletionDto): Promise<{ from: string; value: string }> {
+  async createCompletion({ messages }: CreateCompletionDto): Promise<{
+    choices: { from: MessageTypeEnum; value: string }[];
+  }> {
     const lastMessage = messages[messages.length - 1];
 
     const conversation = await this.conversationRepository.findByMessage(
       lastMessage,
     );
 
-    if (!conversation || !conversation.nextMessageValue) {
+    if (!conversation || conversation.length === 0) {
       throw new NotFoundException('No completion found for this message');
     }
 
     return {
-      from: conversation.nextMessageRole,
-      value: conversation.nextMessageValue,
+      choices: conversation.map((convo) => ({
+        from: convo.nextMessageRole,
+        value: convo.nextMessageValue,
+      })),
     };
   }
 }

@@ -35,6 +35,6 @@ export class ConversationRepository {
   }
 
   async findByMessage({ from, value }: { from: string; value: string }) {
-    return await this.conversationModel.findOne({ value, from });
+    return await this.conversationModel.find({ value, from });
   }
 }
