@@ -105,19 +105,28 @@ export class ConversationService {
   }> {
     const lastMessage = messages[messages.length - 1];
 
-    const conversation = await this.conversationRepository.findByMessage(
+    const conversations = await this.conversationRepository.findByMessage(
       lastMessage,
     );
 
-    if (!conversation || conversation.length === 0) {
+    if (!conversations || conversations.length === 0) {
       throw new NotFoundException('No completion found for this message');
     }
 
-    return {
-      choices: conversation.map((convo) => ({
-        from: convo.nextMessageType,
-        value: convo.nextMessageValue,
-      })),
-    };
+    const choices = [];
+
+    for (const convo of conversations) {
+      if (convo.nextMessageType && convo.nextMessageValue) {
+        choices.push({
+          from: convo.nextMessageType,
+          value: convo.nextMessageValue,
+        });
+      }
+    }
+
+    if (choices.length > 0) {
+      return { choices };
+    }
+    throw new NotFoundException('No completion found for this message');
   }
 }
