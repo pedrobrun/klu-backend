@@ -53,10 +53,10 @@ So, for this version, the data structure is further expanded to include referenc
 {
   "_id": "some-object-id-here",
   "externalId": "id-that-came-from-the-json-file",
-  "from": "gpt",
-  "value": "dummy message value",
-  "prevMessageValue": "dummy previous message value",
-  "prevMessageType": "human",
+  "from": "gpt", // indexed
+  "value": "dummy message value", // indexed
+  "prevMessageValue": "dummy previous message value", // indexed
+  "prevMessageType": "human", // indexed
   "nextMessageValue": "dummy next message value",
   "nextMessageType": "human"
 }
