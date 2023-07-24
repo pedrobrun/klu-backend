@@ -1,6 +1,4 @@
-import { IsArray, IsEnum, IsString } from 'class-validator';
-import { MessageEntity } from '../message.entity';
-import { Type } from 'class-transformer';
+import { IsEnum, IsString } from 'class-validator';
 import { MessageTypeEnum } from '../message-type.enum';
 
 export class CreateConversationDto {

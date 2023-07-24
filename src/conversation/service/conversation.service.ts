@@ -58,9 +58,9 @@ export class ConversationService {
           try {
             const formattedBatch: CreateConversationDto[] = batch
               .map((data) => {
-                let conversationDtos: CreateConversationDto[] = [];
+                const conversationDtos: CreateConversationDto[] = [];
                 data.conversations.forEach((convo, index) => {
-                  let dto: CreateConversationDto = {
+                  const dto: CreateConversationDto = {
                     externalId: data.externalId,
                     from: convo.from as MessageTypeEnum,
                     value: convo.value,
