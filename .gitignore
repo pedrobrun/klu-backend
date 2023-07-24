@@ -2,7 +2,7 @@
 .env
 
 # Seed Data
-src/seed-data/
+src/seed-data/conversations.json
 
 # compiled output
 /dist
