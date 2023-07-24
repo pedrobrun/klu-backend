@@ -64,6 +64,10 @@ So, for this version, the data structure is further expanded to include referenc
 
 # Tech Stack Decisions
 
+## Why I didn't implement Caching?
+
+I chose to not implement caching because even though we're just mimicking and not replicating an AI endpoint, in a chat completion context, responses from an AI model are highly dynamic and contextual, depending upon the unique input and conversation history. Caching, a technique used to store and reuse previously fetched or computed data, might seem an effective way to enhance performance, but it might not align well with the requirements and characteristics of a chat completion endpoint. Overall I just feel like it would be slightly cheating just to boost the performance requirement.
+
 ## Language Tradeoff
 
 I chose Node.js as the primary technology for this project over something else like Python due to the following reasons:
