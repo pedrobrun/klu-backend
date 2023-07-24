@@ -18,9 +18,4 @@ export class ConversationController {
   async createCompletion(@Body() createCompletionDto: CreateCompletionDto) {
     return await this.conversationService.createCompletion(createCompletionDto);
   }
-
-  @Post('seed/test')
-  async testSeed(@Body() seedConversationsDto: SeedConversationsDto) {
-    return await this.conversationService.testSeed(seedConversationsDto);
-  }
 }
