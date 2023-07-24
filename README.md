@@ -154,6 +154,55 @@ Set up your env variables looking into .env.example. Rename the file to just .en
 
 This secret key should be your `SEED_SECRET` from your .env file.
 
+## Completion Endpoint
+
+1. Hit the `/conversation/completion` endpoint with a POST request, the body should look like this:
+
+```json
+{
+  "messages": [
+    {
+      "from": "human",
+      "value": "Summarize the main ideas of Brendon Burchard's Experts Academy into bullet points as it pertains to a growth marketing agency implementing these strategies and tactics for their clients..."
+    }
+  ]
+}
+```
+
+You can also send an array of messages:
+
+```json
+{
+  "messages": [
+    {
+      "from": "human",
+      "value": "Some other message..."
+    },
+    {
+      "from": "human",
+      "value": "Summarize the main ideas of Brendon Burchard's Experts Academy into bullet points as it pertains to a growth marketing agency implementing these strategies and tactics for their clients..."
+    }
+  ]
+}
+```
+
+Sample response:
+
+```json
+{
+  "choices": [
+    {
+      "from": "gpt",
+      "value": "some message content here"
+    },
+    {
+      "from": "gpt",
+      "value": "some other stuff here"
+    }
+  ]
+}
+```
+
 ## Benchmarking
 
 To run your own benchmarking tests, just run in your terminal, at the root of the project:
