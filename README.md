@@ -112,9 +112,9 @@ For benchmarking, I relied on Autocannon, a powerful HTTP/1.1 benchmarking tool,
 
 🚀 **V2:**
 
-- 🐌 Latency: 106.53ms - <span style="color:green">98.3%</span> performance improvement compared to V1
-- ⚡ Requests per second: 4675.9 - <span style="color:green">16058%</span> performance improvement compared to V1
-- 🔄 Requests per minute: 280554 - <span style="color:green">15992%</span> performance improvement compared to V1
+- 🐌 Latency: 106.53ms - ⭐️ <strong>98.3%</strong> performance improvement compared to V1
+- ⚡ Requests per second: 4675.9 - ⭐️ <strong>16058%</strong> performance improvement compared to V1
+- 🔄 Requests per minute: 280554 - ⭐️ <strong>15992%</strong> performance improvement compared to V1
   
 ![v2](https://github.com/pedrobrun/klu-backend/assets/82632528/3939996d-cc4b-4e24-8115-f9a094e2bb3a)
 
@@ -122,9 +122,9 @@ For benchmarking, I relied on Autocannon, a powerful HTTP/1.1 benchmarking tool,
 
 🚀 **V3:**
 
-- 🐌 Latency: 115.53ms - <span style="color:green">98.1%</span> performance improvement compared to V1
-- ⚡ Requests per second: 4291.5 - <span style="color:green">14732%</span> performance improvement compared to V1
-- 🔄 Requests per minute: 257490 - <span style="color:green">14719%</span> performance improvement compared to V1
+- 🐌 Latency: 115.53ms - ⭐️ <strong>98.1%</strong> performance improvement compared to V1
+- ⚡ Requests per second: 4291.5 - ⭐️ <strong>14732%</strong> performance improvement compared to V1
+- 🔄 Requests per minute: 257490 - ⭐️ <strong>14719%</strong> performance improvement compared to V1
 
 ![v3](https://github.com/pedrobrun/klu-backend/assets/82632528/5c0df890-6e99-48c0-9160-a9d2627d981c)
 
