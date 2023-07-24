@@ -50,9 +50,6 @@ The project includes three versions, each building upon the last to optimize per
 So, for this version, the data structure is further expanded to include references to both the next message and the preceding one for each individual message. Along with maintaining the indexes on `from` and `value` fields, new indexes on the new fields `prevMessageFrom` and `prevMessageValue` are introduced. As I said, also querying for the previous message helps managing common messages more efficiently by significantly reducing the number of potential messages returned. <br/> 🌱 The average seeding time for this version is approximately 1 minute and 40 seconds. <br/> 📄 Data structure:
 
 ```json
-/**
- * Paste one or more documents here
- */
 {
   "_id": "some-object-id-here",
   "externalId": "id-that-came-from-the-json-file",
@@ -109,6 +106,8 @@ For benchmarking, I relied on Autocannon, a powerful HTTP/1.1 benchmarking tool,
 - ⚡ Requests per second: 29
 - 🔄 Requests per minute: 1740
 
+![bench_klu_v1](https://github.com/pedrobrun/klu-backend/assets/82632528/c4713d97-ae33-4c16-a09d-d914b9c8de22)
+
 <br/>
 
 🚀 **V2:**
@@ -116,6 +115,8 @@ For benchmarking, I relied on Autocannon, a powerful HTTP/1.1 benchmarking tool,
 - 🐌 Latency: 106.53ms - <span style="color:green">98.3%</span> performance improvement compared to V1
 - ⚡ Requests per second: 4675.9 - <span style="color:green">16058%</span> performance improvement compared to V1
 - 🔄 Requests per minute: 280554 - <span style="color:green">15992%</span> performance improvement compared to V1
+  
+![v2](https://github.com/pedrobrun/klu-backend/assets/82632528/3939996d-cc4b-4e24-8115-f9a094e2bb3a)
 
 <br/>
 
@@ -124,6 +125,8 @@ For benchmarking, I relied on Autocannon, a powerful HTTP/1.1 benchmarking tool,
 - 🐌 Latency: 115.53ms - <span style="color:green">98.1%</span> performance improvement compared to V1
 - ⚡ Requests per second: 4291.5 - <span style="color:green">14732%</span> performance improvement compared to V1
 - 🔄 Requests per minute: 257490 - <span style="color:green">14719%</span> performance improvement compared to V1
+
+![v3](https://github.com/pedrobrun/klu-backend/assets/82632528/5c0df890-6e99-48c0-9160-a9d2627d981c)
 
 ## Installation
 
