@@ -6,7 +6,7 @@ The project includes three versions, each building upon the last to optimize per
 
 ## Version 1 - Starting Point (Simplest but less performant)
 
-🧠 In the initial version, the data is stored in a way that mirrors the structure of the original JSON file. For each request to the endpoint, an array of messages is processed. The system focuses on the last message, while disregarding the rest. It finds all the messages that are equal to the last message that the user sent, querying for the messages inside the `conversations` array, then it returns all the possible next messages, in case they exist. <br/> 🌱 The average seeding time for this version averaged impressively only 22 seconds.
+🧠 In the initial version, the data is stored in a way that mirrors the structure of the original JSON file. For each request to the endpoint, an array of messages is processed. The system focuses on the last message, while disregarding the rest. It finds all the messages that are equal to the last message that the user sent, querying for the messages inside the `conversations` array, then it returns all the possible next messages, in case they exist. <br/> 🌱 The average seeding time for this version was impressively only 22 seconds.
 <br/>
 📄 Data structure:
 
