@@ -1,6 +1,6 @@
 # OpenAI Chat Completion Mimic API
 
-This project implements an API that mimics the OpenAI Chat Completion endpoint. The dataset used in this project can be found [here](https://huggingface.co/datasets/anon8231489123/ShareGPT_Vicuna_unfiltered/blob/main/ShareGPT_V3_unfiltered_cleaned_split.json).
+This project implements an API that mimics the OpenAI Chat Completion endpoint. The dataset used in this project can be found [here](https://drive.google.com/file/d/18PkPIYJ7ZNK5zLSxSt_d5-0hxvJXGxhD/view).
 
 The project includes three versions, each building upon the last to optimize performance and enhance functionality. Each version returns an object with a `choices` field that contains multiple possible next messages based on the data available.
 
@@ -153,10 +153,18 @@ $ yarn env:stop # stop the mongodb container
 
 Set up your env variables looking into .env.example. Rename the file to just .env.
 
+## Running the app
+
+```bash
+# watch mode
+$ yarn run start:dev
+```
+
 ## Seeding
 
 1. Name your json file containing the data as `conversations.json` and put it at `src/seed-data/conversations.json`. After that you can hit the `/conversation/seed` endpoint with a POST request sending this as the body:
 
+###### _It's obviously not ideal to send a secret in the body. This is just a simple way to call the endpoint and emulate some restriction to the seeding process._
 ```json
 {
   "secret": "SUPERSECRETSEEDKEY"
@@ -220,13 +228,6 @@ To run your own benchmarking tests, just run in your terminal, at the root of th
 
 ```bash
 $ yarn benchmark:completion
-```
-
-## Running the app
-
-```bash
-# watch mode
-$ yarn run start:dev
 ```
 
 ## Test
